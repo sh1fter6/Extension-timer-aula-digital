@@ -1,41 +1,48 @@
 # Extensión Alarma Aula Digital
 
-Una extensión de navegador para evitar que la sesión en la plataforma **Aula Digital de SENCE** (`auladigital.sence.cl`) expire por inactividad.
+Una extensión de navegador diseñada para alertar al usuario antes de que transcurran 30 minutos en la plataforma de Aula Digital, evitando así que el sistema deje de registrar el tiempo y se pierda el acumulado.
 
 ---
 
-## 🚀 ¿Qué es?
+## El Problema
 
-La plataforma Aula Digital de SENCE cierra automáticamente la sesión de los usuarios tras 30 minutos de inactividad. Esta extensión soluciona ese inconveniente de manera no intrusiva:
-- Mantiene un temporizador interno de **29 minutos**.
-- Se reinicia de forma inteligente y automática cada vez que navegas, haces click o cambias de página dentro de Aula Digital.
-- Si el temporizador llega a 0 (lo que significa que llevas 29 minutos sin hacer click), el navegador lanzará una **notificación nativa del sistema** recordándote interactuar con la página para no perder tu sesión.
+La plataforma de Aula Digital contabiliza el tiempo de permanencia del usuario. No obstante, al alcanzar los 30 minutos de inactividad, el sistema deja de registrar el tiempo transcurrido, provocando la pérdida de todo el tiempo acumulado en esa sesión.
 
----
-
-## 🛠️ ¿Cómo se instala?
-
-### En navegadores basados en Chromium (Google Chrome, Brave, Microsoft Edge, Opera)
-1. Descarga o clona este repositorio en tu computadora.
-2. Abre tu navegador y dirígete a `chrome://extensions/`.
-3. Activa el **Modo de desarrollador** (habitualmente en la esquina superior derecha).
-4. Haz click en el botón **Cargar descomprimida** (Load unpacked).
-5. Selecciona la carpeta `Chromium` ubicada dentro del directorio de este proyecto.
-
-### En Mozilla Firefox
-1. Descarga o clona este repositorio en tu computadora.
-2. Abre Firefox y dirígete a la dirección `about:debugging`.
-3. En el menú lateral izquierdo, haz click en **Este Firefox** (This Firefox).
-4. Haz click en el botón **Cargar complemento temporal...** (Load Temporary Add-on...).
-5. Selecciona el archivo `manifest.json` dentro de la carpeta `Mozilla` de este proyecto.
+Esta extensión actúa como una alarma para avisar al usuario cuándo debe interactuar (hacer click) en la plataforma antes de que se cumpla ese límite, garantizando que el tiempo siga acumulándose de manera continua.
 
 ---
 
-## 📖 ¿Cómo se usa?
+## Funcionamiento
 
-1. Una vez instalada, la extensión funciona **de forma automática**.
-2. Al ingresar y navegar en [Aula Digital SENCE](https://auladigital.sence.cl), el contador se restablecerá automáticamente a 29:00 minutos.
-3. Si deseas comprobar cuánto tiempo queda, puedes hacer click en el ícono de la extensión en la barra de herramientas para ver el conteo en tiempo real.
-4. Si pasa el tiempo sin interacción y queda solo 1 minuto de sesión, recibirás una notificación de alerta:  
-   * **Título:** `CLICK EN AULA DIGITAL`  
-   * **Mensaje:** `Queda 1 minuto de actividad restante.`
+* **Temporizador:** Mantiene una cuenta regresiva de 29 minutos.
+* **Reinicio Inteligente:** Se reinicia de forma automática al detectar navegación, clicks o cambios de página dentro del dominio de Aula Digital.
+* **Alerta Preventiva:** Si el temporizador llega a cero (29 minutos sin interacción), el navegador emite una notificación nativa del sistema indicando que es necesario hacer click en la plataforma.
+
+---
+
+## Instalación
+
+### Navegadores Basados en Chromium (Chrome, Brave, Edge, Opera)
+
+1. Descargue o clone este repositorio en su equipo.
+2. Abra el navegador y acceda a la dirección `chrome://extensions/`.
+3. Active el **Modo de desarrollador** (esquina superior derecha).
+4. Haga click en **Cargar descomprimida** (Load unpacked).
+5. Seleccione la carpeta `Chromium` en el directorio de este proyecto.
+
+### Mozilla Firefox
+
+1. Descargue o clone este repositorio en su equipo.
+2. Abra Firefox y acceda a la dirección `about:debugging`.
+3. En el menú lateral izquierdo, seleccione **Este Firefox** (This Firefox).
+4. Haga click en **Cargar complemento temporal...** (Load Temporary Add-on...).
+5. Seleccione el archivo `manifest.json` dentro de la carpeta `Mozilla` de este proyecto.
+
+---
+
+## Uso
+
+1. La extensión funciona de forma automática al ingresar a la plataforma de Aula Digital.
+2. Al navegar o realizar clicks en el sitio, el contador se restablece a 29 minutos.
+3. Puede consultar el tiempo restante en cualquier momento haciendo click en el ícono de la extensión en la barra de herramientas.
+4. Si transcurre el tiempo sin interacción y queda un minuto restante, se emitirá la alerta del sistema.
