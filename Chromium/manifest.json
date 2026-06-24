@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Alarma Aula Digital",
+  "version": "1.0",
+  "permissions": ["notifications", "storage", "alarms"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://auladigital.sence.cl/*"],
+      "js": ["content.js"],
+      "all_frames": true
+    }
+  ]
+}
