@@ -30,6 +30,14 @@ Esta extensión actúa como una alarma para avisar al usuario cuándo debe inter
 4. Haga click en **Cargar descomprimida** (Load unpacked).
 5. Seleccione la carpeta `Chromium` en el directorio de este proyecto.
 
+### Mozilla Firefox
+
+1. Descargue o clone este repositorio en su equipo.
+2. Abra Firefox y acceda a la dirección `about:debugging`.
+3. En el menú lateral izquierdo, seleccione **Este Firefox** (This Firefox).
+4. Haga click en **Cargar complemento temporal...** (Load Temporary Add-on...).
+5. Seleccione el archivo `manifest.json` dentro de la carpeta `Mozilla` de este proyecto.
+
 ---
 
 ## Uso
