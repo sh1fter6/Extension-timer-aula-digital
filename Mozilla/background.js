@@ -3,9 +3,11 @@ audio.preload = 'auto';
 
 async function resetTimer() {
   await chrome.alarms.clearAll();
-  const endTime = Date.now() + 1740000; // 29 minutos en ms
+  const data = await chrome.storage.local.get(["timerDuration"]);
+  const duration = data.timerDuration || 29;
+  const endTime = Date.now() + duration * 60 * 1000;
   await chrome.storage.local.set({ endTime });
-  chrome.alarms.create("alarmaAula", { delayInMinutes: 29 });
+  chrome.alarms.create("alarmaAula", { delayInMinutes: duration });
 }
 
 function playSound() {

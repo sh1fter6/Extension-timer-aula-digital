@@ -2,36 +2,255 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
   <style>
-    body { 
-      width: 250px; 
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-      text-align: center; 
+    body {
+      width: 240px;
+      height: 160px;
       margin: 0;
-      padding: 20px;
-      background-color: #f8f9fa;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+      overflow: hidden;
+      background-color: #1e293b;
+      color: #ffffff;
+      user-select: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
-    h3 { 
-      margin: 0 0 10px 0; 
-      font-size: 14px; 
-      color: #555;
+    .app-container {
+      position: relative;
+      width: 240px;
+      height: 160px;
+      overflow: hidden;
+    }
+    .screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 240px;
+      height: 160px;
+      box-sizing: border-box;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    }
+    #main-screen {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    #settings-screen {
+      transform: translateX(100%);
+      opacity: 0;
+      justify-content: flex-start;
+    }
+    
+    /* Screen transitions */
+    .app-container.show-settings #main-screen {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    .app-container.show-settings #settings-screen {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    /* Small Gear and Back buttons */
+    .top-btn {
+      position: absolute;
+      top: 8px;
+      background: none;
+      border: none;
+      padding: 4px;
+      color: inherit;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s, transform 0.2s, background-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .top-btn:hover {
+      opacity: 1;
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    body.theme-light .top-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    #btn-settings {
+      right: 8px;
+    }
+    #btn-back {
+      left: 8px;
+    }
+    .top-btn svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* Main View */
+    .timer-container {
+      text-align: center;
+      margin-top: 8px;
+    }
+    .timer-label {
+      font-size: 10px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      opacity: 0.7;
+      margin-bottom: 2px;
+    }
+    #time {
+      font-size: 44px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+    }
+
+    /* Settings View */
+    .settings-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      opacity: 0.8;
     }
-    #time { 
-      font-size: 32px; 
-      font-weight: 800; 
-      color: #2b3a4a;
-      background: #e9ecef;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    .settings-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .settings-label {
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .settings-value {
+      font-size: 10px;
+      opacity: 0.8;
+      font-weight: 400;
+    }
+    
+    /* Styled Range Input */
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 95px;
+      background: rgba(255, 255, 255, 0.15);
+      height: 4px;
+      border-radius: 2px;
+      outline: none;
+      margin: 0;
+    }
+    body.theme-light input[type=range] {
+      background: rgba(0, 0, 0, 0.1);
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    body.theme-light input[type=range]::-webkit-slider-thumb {
+      background: #1e293b;
+    }
+
+    /* Text Inputs */
+    .color-input {
+      width: 95px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+      color: inherit;
+      font-family: inherit;
+      font-size: 10px;
+      padding: 3px 6px;
+      outline: none;
+      box-sizing: border-box;
+      text-align: center;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+    body.theme-light .color-input {
+      background: rgba(0, 0, 0, 0.04);
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+    .color-input:focus {
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    body.theme-light .color-input:focus {
+      border-color: rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Light Theme Text Modifiers */
+    body.theme-light {
+      background-color: #f8f9fa;
+      color: #1e293b;
     }
   </style>
 </head>
 <body>
-  <h3>Próxima alarma en</h3>
-  <div id="time">--:--</div>
+  <div class="app-container" id="app-container">
+    <!-- Main Screen -->
+    <div class="screen" id="main-screen">
+      <button class="top-btn" id="btn-settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+      
+      <div class="timer-container">
+        <div class="timer-label">Próxima alarma en</div>
+        <div id="time">--:--</div>
+      </div>
+    </div>
+    
+    <!-- Settings Screen -->
+    <div class="screen" id="settings-screen">
+      <button class="top-btn" id="btn-back" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+      
+      <div class="settings-title">Configuración</div>
+      
+      <div class="settings-grid">
+        <!-- Duration setting -->
+        <div class="settings-row">
+          <div class="settings-label">Tiempo <span id="val-duration" class="settings-value">(29 min)</span></div>
+          <input type="range" id="input-duration" min="1" max="29" value="29">
+        </div>
+        
+        <!-- Background color setting -->
+        <div class="settings-row">
+          <div class="settings-label">Fondo (R, G, B)</div>
+          <input type="text" id="input-bg-color" class="color-input" placeholder="ej: 30, 41, 59">
+        </div>
+        
+        <!-- Text color setting -->
+        <div class="settings-row">
+          <div class="settings-label">Reloj (R, G, B)</div>
+          <input type="text" id="input-text-color" class="color-input" placeholder="ej: 255, 255, 255">
+        </div>
+      </div>
+    </div>
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>
