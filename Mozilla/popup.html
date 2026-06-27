@@ -44,13 +44,35 @@
       opacity: 0;
       justify-content: flex-start;
     }
+    #picker-screen {
+      transform: translateX(200%);
+      opacity: 0;
+      justify-content: flex-start;
+    }
     
     /* Screen transitions */
-    .app-container.show-settings #main-screen {
+    .app-container.view-settings #main-screen {
       transform: translateX(-100%);
       opacity: 0;
     }
-    .app-container.show-settings #settings-screen {
+    .app-container.view-settings #settings-screen {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    .app-container.view-settings #picker-screen {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    .app-container.view-picker #main-screen {
+      transform: translateX(-200%);
+      opacity: 0;
+    }
+    .app-container.view-picker #settings-screen {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    .app-container.view-picker #picker-screen {
       transform: translateX(0);
       opacity: 1;
     }
@@ -58,10 +80,12 @@
     /* Small Gear and Back buttons */
     .top-btn {
       position: absolute;
-      top: 8px;
+      top: 6px;
+      width: 24px;
+      height: 24px;
       background: none;
       border: none;
-      padding: 4px;
+      padding: 0;
       color: inherit;
       cursor: pointer;
       opacity: 0.6;
@@ -70,6 +94,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
+      z-index: 10;
     }
     .top-btn:hover {
       opacity: 1;
@@ -80,10 +105,10 @@
       background: rgba(0, 0, 0, 0.05);
     }
     #btn-settings {
-      right: 8px;
+      right: 6px;
     }
-    #btn-back {
-      left: 8px;
+    #btn-back, #btn-picker-back {
+      left: 6px;
     }
     .top-btn svg {
       width: 15px;
@@ -204,38 +229,117 @@
       border-color: rgba(0, 0, 0, 0.3);
     }
 
-    /* Native Color Picker Circle Style */
-    .color-picker-native {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
+    /* Square Preview button with white border */
+    .color-preview-btn {
       width: 18px;
       height: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 50%;
-      background: none;
+      border: 1.5px solid #ffffff;
+      border-radius: 3px;
       cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+      background-color: transparent;
       padding: 0;
-      overflow: hidden;
       box-sizing: border-box;
-      transition: transform 0.15s, border-color 0.15s;
+      transition: transform 0.15s, box-shadow 0.15s;
     }
-    body.theme-light .color-picker-native {
-      border-color: rgba(0, 0, 0, 0.15);
-    }
-    .color-picker-native::-webkit-color-swatch-wrapper {
-      padding: 0;
-    }
-    .color-picker-native::-webkit-color-swatch {
-      border: none;
-      border-radius: 50%;
-    }
-    .color-picker-native::-moz-color-swatch {
-      border: none;
-      border-radius: 50%;
-    }
-    .color-picker-native:hover {
+    .color-preview-btn:hover {
       transform: scale(1.15);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.35);
+    }
+    body.theme-light .color-preview-btn {
+      border-color: #1e293b;
+    }
+
+    /* Custom Color Picker Screen */
+    .picker-layout {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .color-block {
+      position: relative;
+      width: 125px;
+      height: 95px;
+      background-color: #f00;
+      border-radius: 4px;
+      cursor: crosshair;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-sizing: border-box;
+    }
+    body.theme-light .color-block {
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+    .color-overlay-white {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to right, #fff, transparent);
+    }
+    .color-overlay-black {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to bottom, transparent, #000);
+    }
+    .color-cursor {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border: 1px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 2px rgba(0,0,0,0.5);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      left: 100%;
+      top: 0%;
+      box-sizing: border-box;
+    }
+    .picker-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 71px;
+      align-items: center;
+    }
+    .picker-preview-box {
+      width: 71px;
+      height: 28px;
+      border-radius: 4px;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+      box-sizing: border-box;
+    }
+    body.theme-light .picker-preview-box {
+      border-color: #1e293b;
+    }
+    #picker-hex {
+      font-size: 9px;
+      font-weight: 600;
+      opacity: 0.8;
+      font-family: inherit;
+      font-variant-numeric: tabular-nums;
+      text-transform: uppercase;
+    }
+    .hue-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 71px;
+      height: 10px;
+      border-radius: 5px;
+      outline: none;
+      margin: 0;
+      background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
+      cursor: pointer;
+    }
+    .hue-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.25);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
     
     /* Light Theme Text Modifiers */
@@ -285,7 +389,7 @@
           <div class="settings-label">Fondo (R, G, B)</div>
           <div class="color-input-wrapper">
             <input type="text" id="input-bg-color" class="color-input" placeholder="ej: 30, 41, 59">
-            <input type="color" id="picker-bg-color" class="color-picker-native">
+            <button id="btn-picker-bg" class="color-preview-btn" aria-label="Elegir fondo"></button>
           </div>
         </div>
         
@@ -294,11 +398,38 @@
           <div class="settings-label">Reloj (R, G, B)</div>
           <div class="color-input-wrapper">
             <input type="text" id="input-text-color" class="color-input" placeholder="ej: 255, 255, 255">
-            <input type="color" id="picker-text-color" class="color-picker-native">
+            <button id="btn-picker-text" class="color-preview-btn" aria-label="Elegir reloj"></button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Color Picker Screen -->
+    <div class="screen" id="picker-screen">
+      <button class="top-btn" id="btn-picker-back" aria-label="Back to settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+      
+      <div class="settings-title" id="picker-title">Color de Fondo</div>
+      
+      <div class="picker-layout">
+        <div id="color-block" class="color-block">
+          <div class="color-overlay-white"></div>
+          <div class="color-overlay-black"></div>
+          <div id="color-cursor" class="color-cursor"></div>
+        </div>
+        
+        <div class="picker-controls">
+          <div class="picker-preview-box" id="picker-preview"></div>
+          <div id="picker-hex">#ffffff</div>
+          <input type="range" id="hue-slider" class="hue-slider" min="0" max="360" value="0">
+        </div>
+      </div>
+    </div>
+
   </div>
   <script src="popup.js"></script>
 </body>
