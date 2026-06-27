@@ -1,3 +1,6 @@
+const audio = new Audio('sound.ogg');
+audio.preload = 'auto';
+
 async function resetTimer() {
   await chrome.alarms.clearAll();
   const endTime = Date.now() + 1740000; // 29 minutos en ms
@@ -5,40 +8,27 @@ async function resetTimer() {
   chrome.alarms.create("alarmaAula", { delayInMinutes: 29 });
 }
 
-async function playSound() {
-  try {
-    await chrome.offscreen.createDocument({
-      url: 'offscreen.html',
-      reasons: ['AUDIO_PLAYBACK'],
-      justification: 'Alerta de sonido para la alarma de Aula Digital'
-    });
-  } catch (error) {
-    if (!error.message.includes('Only a single offscreen document may be created')) {
-      console.error('Error al crear el documento offscreen:', error);
-    }
-  }
-  chrome.runtime.sendMessage({
-    action: 'play_sound',
-    file: 'sound.ogg'
+function playSound() {
+  audio.currentTime = 0;
+  audio.play().catch(error => {
+    console.error('Error al reproducir sonido:', error);
   });
 }
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "alarmaAula") {
+    playSound();
     chrome.notifications.create("alarmaAula", {
       type: "basic",
       iconUrl: "icon-48.png",
       title: "CLICK EN AULA DIGITAL",
       message: "Queda 1 minuto de actividad restante."
     });
-    playSound();
   }
 });
 
 chrome.runtime.onMessage.addListener((request) => {
   if (request.action === "resetTimer") {
     resetTimer();
-  } else if (request.action === "close_offscreen") {
-    chrome.offscreen.closeDocument().catch(() => {});
   }
 });

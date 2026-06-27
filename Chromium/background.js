@@ -28,6 +28,7 @@ async function playSound() {
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "alarmaAula") {
+    playSound();
     chrome.notifications.create({
       type: "basic",
       iconUrl: "icon-48.png",
@@ -36,7 +37,6 @@ chrome.alarms.onAlarm.addListener((alarm) => {
       priority: 2,
       requireInteraction: true
     });
-    playSound();
   }
 });
 

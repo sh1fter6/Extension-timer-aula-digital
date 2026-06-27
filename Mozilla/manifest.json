@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Alarma Aula Digital",
   "version": "1.0",
-  "permissions": ["notifications", "tabs", "storage", "alarms", "offscreen"],
+  "permissions": ["notifications", "tabs", "storage", "alarms"],
   "action": {
     "default_popup": "popup.html"
   },
