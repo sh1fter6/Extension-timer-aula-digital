@@ -44,6 +44,12 @@ function getRgbComponents(colorStr) {
   return { r: 30, g: 41, b: 59 };
 }
 
+function colorToHex(colorStr) {
+  const { r, g, b } = getRgbComponents(colorStr);
+  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+}
+
+// Light theme contrast check helper
 function isLightColor(colorStr) {
   const { r, g, b } = getRgbComponents(colorStr);
   const brightness = (r * 299 + g * 587 + b * 114) / 1000;
@@ -70,12 +76,16 @@ function initSettings(currentDuration, currentBg, currentText) {
   const valDuration = document.getElementById('val-duration');
   const bgInput = document.getElementById('input-bg-color');
   const textInput = document.getElementById('input-text-color');
+  const pickerBg = document.getElementById('picker-bg-color');
+  const pickerText = document.getElementById('picker-text-color');
   
   slider.value = currentDuration;
   valDuration.innerText = `(${currentDuration} min)`;
   
   bgInput.value = formatColorForInput(currentBg);
   textInput.value = formatColorForInput(currentText);
+  pickerBg.value = colorToHex(currentBg);
+  pickerText.value = colorToHex(currentText);
   
   slider.addEventListener('input', (e) => {
     valDuration.innerText = `(${e.target.value} min)`;
@@ -90,13 +100,29 @@ function initSettings(currentDuration, currentBg, currentText) {
   bgInput.addEventListener('change', async (e) => {
     const parsed = parseColor(e.target.value);
     await chrome.storage.local.set({ bgColor: parsed });
+    pickerBg.value = colorToHex(parsed);
     applyThemeStyles(parsed, textInput.value);
+  });
+  
+  pickerBg.addEventListener('input', async (e) => {
+    const hexVal = e.target.value;
+    bgInput.value = formatColorForInput(hexVal);
+    await chrome.storage.local.set({ bgColor: hexVal });
+    applyThemeStyles(hexVal, textInput.value);
   });
   
   textInput.addEventListener('change', async (e) => {
     const parsed = parseColor(e.target.value);
     await chrome.storage.local.set({ textColor: parsed });
+    pickerText.value = colorToHex(parsed);
     applyThemeStyles(bgInput.value, parsed);
+  });
+  
+  pickerText.addEventListener('input', async (e) => {
+    const hexVal = e.target.value;
+    textInput.value = formatColorForInput(hexVal);
+    await chrome.storage.local.set({ textColor: hexVal });
+    applyThemeStyles(bgInput.value, hexVal);
   });
 }
 

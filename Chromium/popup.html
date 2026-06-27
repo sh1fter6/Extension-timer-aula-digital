@@ -169,9 +169,18 @@
       background: #1e293b;
     }
 
+    /* Color Input Container */
+    .color-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      width: 95px;
+      justify-content: flex-end;
+    }
+
     /* Text Inputs */
     .color-input {
-      width: 95px;
+      width: 72px;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 4px;
@@ -193,6 +202,40 @@
     }
     body.theme-light .color-input:focus {
       border-color: rgba(0, 0, 0, 0.3);
+    }
+
+    /* Native Color Picker Circle Style */
+    .color-picker-native {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+      overflow: hidden;
+      box-sizing: border-box;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    body.theme-light .color-picker-native {
+      border-color: rgba(0, 0, 0, 0.15);
+    }
+    .color-picker-native::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+    .color-picker-native::-webkit-color-swatch {
+      border: none;
+      border-radius: 50%;
+    }
+    .color-picker-native::-moz-color-swatch {
+      border: none;
+      border-radius: 50%;
+    }
+    .color-picker-native:hover {
+      transform: scale(1.15);
     }
     
     /* Light Theme Text Modifiers */
@@ -240,13 +283,19 @@
         <!-- Background color setting -->
         <div class="settings-row">
           <div class="settings-label">Fondo (R, G, B)</div>
-          <input type="text" id="input-bg-color" class="color-input" placeholder="ej: 30, 41, 59">
+          <div class="color-input-wrapper">
+            <input type="text" id="input-bg-color" class="color-input" placeholder="ej: 30, 41, 59">
+            <input type="color" id="picker-bg-color" class="color-picker-native">
+          </div>
         </div>
         
         <!-- Text color setting -->
         <div class="settings-row">
           <div class="settings-label">Reloj (R, G, B)</div>
-          <input type="text" id="input-text-color" class="color-input" placeholder="ej: 255, 255, 255">
+          <div class="color-input-wrapper">
+            <input type="text" id="input-text-color" class="color-input" placeholder="ej: 255, 255, 255">
+            <input type="color" id="picker-text-color" class="color-picker-native">
+          </div>
         </div>
       </div>
     </div>
